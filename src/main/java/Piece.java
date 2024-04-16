@@ -1,5 +1,6 @@
 import javax.swing.ImageIcon;					//Imports
 import javax.swing.JLabel;
+import java.util.List;
 
 //An abstract class for all the types of pieces
 @SuppressWarnings("serial")
@@ -11,4 +12,6 @@ public abstract class Piece extends JLabel {
 
     public abstract String getColor();	//This gets the color
     public abstract String getType();	//This gets the type
+    public abstract List<Square> getValidMoves(Square[][] board, int row, int col);
+
 }

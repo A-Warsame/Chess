@@ -1,4 +1,6 @@
 import javax.swing.ImageIcon;
+import java.util.ArrayList;
+import java.util.List;
 
 //The horse/knight piece
 @SuppressWarnings("serial")
@@ -25,5 +27,27 @@ public class Knight extends Piece{
     @Override
     public String getType() {
         return "knight";
+    }
+    @Override
+    public List<Square> getValidMoves(Square[][] board, int row, int col) {
+        List<Square> validMoves = new ArrayList<>();
+
+        int[][] moveOffsets = {{-2, -1}, {-2, 1}, {-1, -2}, {-1, 2}, {1, -2}, {1, 2}, {2, -1}, {2, 1}};
+
+        for (int[] offset : moveOffsets) {
+            int newRow = row + offset[0];
+            int newCol = col + offset[1];
+
+            if (isValidSquare(newRow, newCol) && (board[newRow][newCol].isOpen() ||
+                    !board[newRow][newCol].getPiece().getColor().equals(getColor()))) {
+                validMoves.add(board[newRow][newCol]);
+            }
+        }
+
+        return validMoves;
+    }
+
+    private boolean isValidSquare(int row, int col) {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 }

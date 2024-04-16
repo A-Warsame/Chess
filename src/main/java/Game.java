@@ -2,6 +2,9 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @SuppressWarnings("serial")
 public class Game extends JFrame implements MouseListener {
@@ -12,13 +15,15 @@ public class Game extends JFrame implements MouseListener {
     public static String pieceColor = "";
     public static String whoseMove = "";
     public static boolean active = false;
-    public static boolean capture = false;
+    private List<Square> validMoves;
+    private Piece piece;
+//    public static boolean capture = false;
 
-    //Game object
+    // Game object
     public Game() {
-        //Initializes the game
+        // Initializes the game
         setLayout(new GridBagLayout());
-        //Sets Board
+        // Sets Board
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
@@ -26,170 +31,66 @@ public class Game extends JFrame implements MouseListener {
         add(board, c);
         board.initializeChessBoard();
         whoseMove = "white";
-        for(int i = 0; i < 8; i++) {
-            for(int j = 0; j < 8; j++) board.cell[i][j].addMouseListener(this);
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) board.cell[i][j].addMouseListener(this);
         }
-
     }
+
     Color selected;
-    //Mouse Clicked/Allows pieces to move when the user clicks the mouse.
+    List<Color> selectedTiles;
+
+    // Mouse Clicked/Allows pieces to move when the user clicks the mouse.
     @Override
     public void mouseClicked(MouseEvent e) {
         sourceSquare = (Square) e.getSource();
 
-        if(!sourceSquare.isOpen()) pieceColor = sourceSquare.getPiece().getColor();
+        if (!sourceSquare.isOpen()) pieceColor = sourceSquare.getPiece().getColor();
 
-        if(!active && !sourceSquare.isOpen()) {
+        if (!active && !sourceSquare.isOpen()) {
             active = true;
             previousSquare = sourceSquare;
             selected = previousSquare.getBackground();
             previousSquare.setBackground(new Color(175, 0, 0));
-            if (previousSquare.getPiece().getColor() != whoseMove) clear();
+            piece = previousSquare.getPiece();
+            validMoves = piece.getValidMoves(board.cell, sourceSquare.getRow(), sourceSquare.getCol());
+            selectedTiles = new ArrayList<>();
+            for (Square validMove : validMoves) {
+                Color test = validMove.getBackground();
+                selectedTiles.add(test);
+                validMove.setBackground(new Color( 204, 97, 75));
+            }
+            if (!previousSquare.getPiece().getColor().equals(whoseMove)) clear();
+        } else if (active && previousSquare.getPiece().getColor().equals(whoseMove)) {
+            if (isValidMove(sourceSquare)) {
+                movePiece();
+            } else {
+                clear();
+            }
         }
-        else if (active && previousSquare.getPiece().getColor() == whoseMove) {
-            String pieceType = previousSquare.getPiece().getType();
-            String pieceColor = previousSquare.getPiece().getColor();
-            //-----------------------------Pawn Movement-----------------------------
-            if (pieceType.equalsIgnoreCase("pawn")) {
-                int move = 1; int preCell = 6;
-                if (pieceColor.equalsIgnoreCase("black")) { move = -1; preCell = 1; }
-                //Move
-                if(previousSquare.getRow() == preCell && previousSquare.getRow() == sourceSquare.getRow() + move + move && previousSquare.getCol() == sourceSquare.getCol()) {
-                    movePiece();
-                }
-                else if(previousSquare.getRow() == sourceSquare.getRow() +  move && previousSquare.getCol() == sourceSquare.getCol()) {
-                    movePiece();
-                }
-                //Kill
-                else if(!sourceSquare.isOpen() && previousSquare.getRow() == sourceSquare.getRow() + move && Math.abs(previousSquare.getCol() - sourceSquare.getCol()) == 1) {
-                    capture = true;
-                    movePiece();
-                }
-                else{clear();}
-            }
-            //-----------------------------Knight Movement-----------------------------
-            else if(pieceType.equalsIgnoreCase("knight")) {
-
-                //Move/Kill
-                if((previousSquare.getRow() == sourceSquare.getRow() + 1 && previousSquare.getCol() == sourceSquare.getCol() + 2)
-                        || (previousSquare.getRow() == sourceSquare.getRow() + 1 && previousSquare.getCol() == sourceSquare.getCol() - 2)
-                        || (previousSquare.getRow() == sourceSquare.getRow() - 1 && previousSquare.getCol() == sourceSquare.getCol() + 2)
-                        || (previousSquare.getRow() == sourceSquare.getRow() - 1 && previousSquare.getCol() == sourceSquare.getCol() - 2)
-                        || (previousSquare.getRow() == sourceSquare.getRow() + 2 && previousSquare.getCol() == sourceSquare.getCol() + 1)
-                        || (previousSquare.getRow() == sourceSquare.getRow() - 2 && previousSquare.getCol() == sourceSquare.getCol() + 1)
-                        || (previousSquare.getRow() == sourceSquare.getRow() + 2 && previousSquare.getCol() == sourceSquare.getCol() - 1)
-                        || (previousSquare.getRow() == sourceSquare.getRow() - 2 && previousSquare.getCol() == sourceSquare.getCol() - 1)
-                ) {
-                    capture = true;
-                    movePiece();
-                }
-                else{clear();}
-            }
-            //-----------------------------Rook Movement-----------------------------
-            else if(pieceType.equalsIgnoreCase("rook")) {
-
-                if(previousSquare.getRow() == sourceSquare.getRow() || previousSquare.getCol() == sourceSquare.getCol()) {
-                    capture = true;
-                    movePiece();
-                }
-                else{clear();}
-            }
-            //-----------------------------Bishop Movement-----------------------------
-            else if(pieceType.equalsIgnoreCase("bishop")) {
-
-                //Move/Kill
-                int rowOffset = previousSquare.getRow() - sourceSquare.getRow();
-                int colOffset = previousSquare.getCol() - sourceSquare.getCol();
-                if(Math.abs(rowOffset) == Math.abs(colOffset)) {
-                    capture = true;
-                    movePiece();
-                }
-                else{clear();}
-            }
-            //-----------------------------Queen Movement-----------------------------
-            else if(pieceType.equalsIgnoreCase("queen")) {
-
-                //Move/Kill
-                int rowOffset = previousSquare.getRow() - sourceSquare.getRow();
-                int colOffset = previousSquare.getCol() - sourceSquare.getCol();
-                if(Math.abs(rowOffset) == Math.abs(colOffset)
-                        || previousSquare.getRow() == sourceSquare.getRow()
-                        || previousSquare.getCol() == sourceSquare.getCol()
-                ) {
-                    capture = true;
-                    movePiece();
-                }
-                else{clear();}
-            }
-            //-----------------------------King Movement-----------------------------
-            else if(pieceType.equalsIgnoreCase("king")) {
-
-                //Move/Kill
-                int rowOffset = previousSquare.getRow() - sourceSquare.getRow();
-                int colOffset = previousSquare.getCol() - sourceSquare.getCol();
-                if(Math.abs(rowOffset) == 1 ||  Math.abs(colOffset) == 1)  {
-                    capture = true;
-                    movePiece();
-                }
-                //White Castle
-                else if(pieceColor == "white" && previousSquare.getRow() == 7 && previousSquare.getCol() == 4) {
-                    //King Side
-                    if (sourceSquare.getRow() == 7 && sourceSquare.getCol() == 6 &&
-                            board.cell[7][5].isOpen() && board.cell[7][6].isOpen() && board.cell[7][7].getPiece().getType() == "rook" && board.cell[7][7].getPiece().getColor() == "white") {
-                        movePiece();
-                        sourceSquare = board.cell[7][5];
-                        previousSquare = board.cell[7][7];
-                        whoseMove = "white";
-                        selected = board.cell[7][5].getBackground();
-                        movePiece();
-                    }
-                    //Queen Side
-                    else if (sourceSquare.getRow() == 7 && sourceSquare.getCol() == 2 &&
-                            board.cell[7][1].isOpen() && board.cell[7][2].isOpen() && board.cell[7][3].isOpen() && board.cell[7][0].getPiece().getType() == "rook" && board.cell[7][0].getPiece().getColor() == "white") {
-                        movePiece();
-                        sourceSquare = board.cell[7][3];
-                        previousSquare = board.cell[7][0];
-                        whoseMove = "white";
-                        movePiece();
-                    }
-                }
-                //Black Castle
-                else if(pieceColor == "black" && previousSquare.getRow() == 0 && previousSquare.getCol() == 4) {
-                    //King Side
-                    if (sourceSquare.getRow() == 0 && sourceSquare.getCol() == 6 &&
-                            board.cell[0][5].isOpen() && board.cell[0][6].isOpen() && board.cell[0][7].getPiece().getType() == "rook" && board.cell[0][7].getPiece().getColor() == "black") {
-                        movePiece();
-                        sourceSquare = board.cell[0][5];
-                        previousSquare = board.cell[0][7];
-                        whoseMove = "black";
-                        selected = board.cell[0][5].getBackground();
-                        movePiece();
-                    }
-                    //Queen Side
-                    else if (sourceSquare.getRow() == 0 && sourceSquare.getCol() == 2 &&
-                            board.cell[0][1].isOpen() && board.cell[0][2].isOpen() && board.cell[0][3].isOpen() && board.cell[0][0].getPiece().getType() == "rook" && board.cell[0][0].getPiece().getColor() == "black") {
-                        movePiece();
-                        sourceSquare = board.cell[0][3];
-                        previousSquare = board.cell[0][0];
-                        whoseMove = "black";
-                        movePiece();
-                    }
-                }
-            }
-            else{clear();}
-        }
-
     }
-
-    //Function moves the pieces
+    private boolean isValidMove(Square destination) {
+        Piece piece = previousSquare.getPiece();
+        List<Square> validMoves = piece.getValidMoves(board.cell, previousSquare.getRow(), previousSquare.getCol());
+        return validMoves.contains(destination);
+    }
+    // Function moves the pieces
     public void movePiece() {
         System.out.println("Piece was moved");
-        if(capture && !sourceSquare.isOpen() && !previousSquare.getPiece().getColor().equalsIgnoreCase(pieceColor)) {
+//        capture = true;
+//        if(sourceSquare.isOpen()) {
+//            capture = true;
+//        }
+        if (!sourceSquare.isOpen() && !previousSquare.getPiece().getColor().equalsIgnoreCase(pieceColor)) {
             sourceSquare.remove(sourceSquare.getPiece());
             sourceSquare.setPiece(null);
-            capture = false;
+//            capture = false;
         }
         previousSquare.setBackground(selected);
+        int i = 0;
+        for (Square validMove : validMoves) {
+            validMove.setBackground(selectedTiles.get(i));
+            i++;
+        }
         sourceSquare.add(previousSquare.getPiece());
         sourceSquare.setPiece(previousSquare.getPiece());
         sourceSquare.revalidate();
@@ -199,15 +100,19 @@ public class Game extends JFrame implements MouseListener {
         previousSquare.setPiece(null);
         sourceSquare.setStatus(false);
         previousSquare = null;
-        if (whoseMove == "white") whoseMove = "black";
-        else whoseMove = "white";
+        whoseMove = whoseMove.equals("white") ? "black" : "white";
     }
 
     public void clear() {
         System.out.println("Piece was not moved");
         previousSquare.setBackground(selected);
+        int i = 0;
+        for (Square validMove : validMoves) {
+            validMove.setBackground(selectedTiles.get(i));
+            i++;
+        }
         active = false;
-        capture = false;
+//        capture = false;
         previousSquare = null;
         sourceSquare = null;
     }
@@ -221,13 +126,19 @@ public class Game extends JFrame implements MouseListener {
         frame.setResizable(isDefaultLookAndFeelDecorated());
     }
 
-    //To make sure user input is a priority
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+    }
+
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+    }
+
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
+
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+    }
 }
