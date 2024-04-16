@@ -1,46 +1,45 @@
-import javax.swing.*;
+import javax.swing.JPanel;
 
-public class Square {
-    private Piece piece;
-    private int x;
-    private int y;
-    private JPanel panel; // Reference to the JPanel representing this spot on the GUI
+@SuppressWarnings("serial")
+public class Square extends JPanel {
+    private Piece piece; 						//What piece in the cell
+    private boolean open = true;				//Cell Status (Open?)
+    private int row;
+    private int col;
 
-    public Square(Piece piece, int x, int y) {
-        this.piece = piece;
-        this.x = x;
-        this.y = y;
+    //A cell on the board
+    public Square (int row, int col) {
+
+        this.row = row;
+        this.col = col;
     }
-
-    public JPanel getPanel() {
-        return panel;
+    //Check weather the cell is open or not
+    public boolean isOpen() {
+        return this.open;
     }
-
-    public void setPanel(JPanel panel) {
-        this.panel = panel;
+    //Set cell status
+    public void setStatus(boolean status) {
+        this.open = status;
     }
-
+    //Get cell piece
     public Piece getPiece() {
-        return piece;
+        return this.piece;
     }
-
+    //Set new cell piece
     public void setPiece(Piece piece) {
         this.piece = piece;
     }
-
-    public int getX() {
-        return x;
+    //Set cell position
+    public void setPosition(int row, int col) {
+        this.row = row;
+        this.col = col;
     }
-
-    public void setX(int x) {
-        this.x = x;
+    //Get the row
+    public int getRow() {
+        return this.row;
     }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    //Get the column
+    public int getCol() {
+        return this.col;
     }
 }

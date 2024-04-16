@@ -1,51 +1,29 @@
+import javax.swing.ImageIcon;
+
+//A Rook Piece
+@SuppressWarnings("serial")
 public class Rook extends Piece {
-    private int startX;
-    private int startY;
-    private int x;
-    private int y;
-    private boolean moved = false;
-
-
-    public Rook(int x, int y, boolean isWhite, String type) {
-        super(x, y, isWhite, type);
-        this.x = x;
-        this.y = y;
+    //A rook
+    public Rook(String color) {
+        if (color == "white") {
+            this.color = "white";
+            icon = new ImageIcon("images/white_rook.png");	//
+            setIcon(icon);
+        }
+        else {
+            this.color = "black";
+            icon = new ImageIcon("images/black_rook.png");
+            setIcon(icon);
+        }
     }
-
-    public boolean isMoved() {
-        return moved;
-    }
-
-    public void setMoved(boolean moved) {
-        this.moved = moved;
-    }
-
+    //Returns the color
     @Override
-    public int getX() {
-        return x;
+    public String getColor()  {
+        return this.color;
     }
+    //Returns the type of piece
     @Override
-    public int getY() {
-        return y;
+    public String getType()  {
+        return "rook";
     }
-    // Method to check if the rook has moved from its starting position
-    public boolean isRookMoved() {
-        return moved && (getX() != startX || getY() != startY);
-    }
-
-    @Override
-    public boolean legalMove(ChessBoard chessBoard, Square beforeMove, Square afterMove) {
-        if (beforeMove.getPiece() != null && beforeMove.getPiece().isWhite() == this.isWhite()) {
-            return false;
-    }
-
-
-        int x = Math.abs(beforeMove.getX() - afterMove.getX());
-        int y = Math.abs(beforeMove.getY() - afterMove.getY());
-
-        // Rook moves horizontally or vertically
-        return x == 0 || y == 0;
-    }
-
-
 }

@@ -1,30 +1,29 @@
-public class Knight extends Piece {
+import javax.swing.ImageIcon;
 
-    private int x;
-    private int y;
-
-    public Knight(int x, int y, boolean isWhite, String type) {
-        super(x, y, isWhite, type);
-        this.x = x;
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-    @Override
-    public int getY() {
-        return y;
-    }
-
-    @Override
-    public boolean legalMove(ChessBoard chessBoard, Square start, Square end) {
-        if (end.getPiece().isWhite() == this.isWhite()) {
-            return false;
+//The horse/knight piece
+@SuppressWarnings("serial")
+public class Knight extends Piece{
+    //A knight
+    public Knight(String color) {
+        if (color == "white") {
+            this.color = "white";
+            icon = new ImageIcon("images/white_knight.png");
+            setIcon(icon);
         }
-        int x = Math.abs(start.getX() - end.getX());
-        int y = Math.abs(start.getY() - end.getY());
-        return x * y == 2;
+        else {
+            this.color = "black";
+            icon = new ImageIcon("images/black_knight.png");
+            setIcon(icon);
+        }
+    }
+    //Returns the color
+    @Override
+    public String getColor() {
+        return this.color;
+    }
+    //Returns the type
+    @Override
+    public String getType() {
+        return "knight";
     }
 }

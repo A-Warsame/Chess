@@ -1,62 +1,14 @@
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.ImageIcon;					//Imports
+import javax.swing.JLabel;
 
-public abstract class Piece {
-    private int x;
-    private int y;
-    private boolean taken = false;
-    private boolean white = false;
-    private boolean isWhite;
-    private String type;
+//An abstract class for all the types of pieces
+@SuppressWarnings("serial")
+public abstract class Piece extends JLabel {
 
-    private BufferedImage image;
+    public String color = "white";	//Color
+    public ImageIcon icon;		//The piece image
+    public String pieceType;		//and the piece's type
 
-    public Piece(int x, int y, boolean isWhite, String type) {
-        this.x = x;
-        this.y = y;
-        this.isWhite = isWhite;
-        this.type = type;
-        loadImage();
-    }
-
-    private void loadImage() {
-        // Load the image based on the type of piece
-        try {
-            String color = isWhite ? "white" : "black";
-            String imageName = "src/main/resources/" + color + "-" + type + ".png";
-            image = ImageIO.read(new File(imageName));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public BufferedImage getImage() {
-        return image;
-    }
-
-    public abstract int getX();
-
-    public abstract int getY();
-//    public abstract Image getImage();
-
-
-    public boolean isTaken() {
-        return taken;
-    }
-
-    public void setTaken(boolean taken) {
-        this.taken = taken;
-    }
-
-    public boolean isWhite() {
-        return white;
-    }
-
-    public void setWhite(boolean white) {
-        this.white = white;
-    }
-    public abstract boolean legalMove(ChessBoard chessBoard, Square start, Square end);
+    public abstract String getColor();	//This gets the color
+    public abstract String getType();	//This gets the type
 }

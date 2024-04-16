@@ -1,56 +1,34 @@
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import javax.swing.ImageIcon;
 
+//The bishop
+@SuppressWarnings("serial")
 public class Bishop extends Piece {
-    private int x;
-    private int y;
-
-    public Bishop(int x, int y, boolean isWhite, String type) {
-        super(x, y, isWhite, type);
-        this.x = x;
-        this.y = y;
+    //A standard bishop (Defaults to white)
+    public Bishop() {
+        icon = new ImageIcon("images/white_bishop.png");
+        setIcon(icon);
     }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-    @Override
-    public int getY() {
-        return y;
-    }
-//    public Image getImage(){
-//
-//    }
-
-
-    @Override
-    public boolean legalMove(ChessBoard chessBoard, Square beforeMove, Square afterMove) {
-        if (beforeMove.getPiece() != null && beforeMove.getPiece().isWhite() == this.isWhite()) {
-            return false;
+    //A bishop with color
+    public Bishop(String color) {
+        if (color == "white") {
+            this.color = "white";
+            icon = new ImageIcon("images/white_bishop.png");
+            setIcon(icon);
         }
-        int x = Math.abs(beforeMove.getX() - afterMove.getX());
-        int y = Math.abs(beforeMove.getY() - afterMove.getY());
-
-        return x == y; //moves diagonally
+        else {
+            this.color = "black";
+            icon = new ImageIcon("images/black_bishop.png");
+            setIcon(icon);
+        }
     }
-
-
-//    @Override
-//    public Image getPieceImage(String imagePath) {
-//        //Load Bishop image
-//        BufferedImage originalImage = null;
-//        try {
-//            originalImage = ImageIO.read(new File("black-bishop.png"));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return null;
-//    }
-
-
+    //Returns color
+    @Override
+    public String getColor()  {
+        return this.color;
+    }
+    //Returns type
+    @Override
+    public String getType()  {
+        return "bishop";
+    }
 }
-

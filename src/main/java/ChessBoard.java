@@ -1,158 +1,125 @@
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class ChessBoard extends JPanel {
+    public Square[][] cell = new Square[8][8];					//Board size
+    public Color black = new Color(145,140,125);			//Black cells
+    public Color white = new Color(232, 235, 239);			//White Cells
 
-    private final JPanel[][] tiles = new JPanel[8][8];
-    private final Square[][] squares = new Square[8][8];
-    private final List<Piece> pieces = new ArrayList<>();
+    //Declaration of Black pieces
+    public Pawn[] blackPawn = new Pawn[8];
+    public Bishop[] blackBishop = new Bishop[2];
+    public Knight[] blackKnight = new Knight[2];
+    public Rook[] blackRook = new Rook[2];
+    public King blackKing = new King("black");
+    public Queen blackQueen = new Queen("black");
 
+    //Declaration of White pieces
+    public Pawn[] whitePawn = new Pawn[8];
+    public Bishop[] whiteBishop = new Bishop[2];
+    public Knight[] whiteKnight = new Knight[2];
+    public Rook[] whiteRook = new Rook[2];
+    public King whiteKing = new King("white");
+    public Queen whiteQueen = new Queen("white");
 
-    public ChessBoard() {
-        Dimension dims = new Dimension(64, 64);
-        setLayout(new GridLayout(8, 8));
-
-        // Initialize the squares
+    //Board Object
+    public ChessBoard()  {
+        initializePieces();
+        setLayout(new GridLayout(8,8));
+        //Adding the cells
         for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                squares[i][j] = new Square(null, i, j);
-            }
-        }
-
-        // Adding squares to panel
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                JPanel squarePanel = new JPanel();
-                squarePanel.setPreferredSize(dims);
-                squarePanel.setMinimumSize(dims);
-                if ((i + j) % 2 == 0) {
-                    squarePanel.setBackground(Color.LIGHT_GRAY);
-                } else {
-                    squarePanel.setBackground(Color.WHITE);
+            for(int j = 0; j < 8; j++) {
+                if((i + j) % 2 == 0 ) {
+                    this.cell[i][j] = new Square(i, j);
+                    this.cell[i][j].setBackground(white);
                 }
-                add(squarePanel);
-                tiles[i][j] = squarePanel;
-
-                // Link each JPanel with a Spot on the Board
-                squares[i][j].setPanel(squarePanel);
+                else {
+                    this.cell[i][j] = new Square(i, j);
+                    this.cell[i][j].setBackground(black);
+                }
+                cell[i][j].setPosition(i, j);
+                add(cell[i][j]);
             }
-            // Append all the pieces
         }
-        appendAllPieces();
-
-//        //Create and add pieces to list
-//        Bishop bbishop = new Bishop(2, 0, false, "bishop");
-//        pieces.add(bbishop);
-//
-//        // Place the pieces on the board
-//        JLabel bishopLabel = new JLabel(new ImageIcon(bbishop.getImage()));
-//        tiles[bbishop.getX()][bbishop.getY()].add(bishopLabel);
-
-//        BufferedImage originalImage = null;
-//        try {
-//            originalImage = ImageIO.read(new File("src/main/resources/black-bishop.png"));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        // Scale the image to the desired size
-//        int newWidth = 60; // New width of the image
-//        int newHeight = 60; // New height of the image
-//        Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-//        ImageIcon scaledIcon = new ImageIcon(scaledImage);
-//
-//        // Create JLabel with the scaled image and add it to a specific square
-//        JLabel picLabel = new JLabel(scaledIcon);
-//        tiles[3][4].add(picLabel);
 
     }
-    private void appendAllPieces() {
-        // Black pieces
-        pieces.add(new Rook(0, 0, false, "rook"));
-        pieces.add(new Knight(0, 1, false, "knight"));
-        pieces.add(new Bishop(0, 2, false, "bishop"));
-        pieces.add(new Queen(0, 3, false, "queen"));
-        pieces.add(new King(0, 4, false, "king"));
-        pieces.add(new Bishop(0, 5, false, "bishop"));
-        pieces.add(new Knight(0, 6, false, "knight"));
-        pieces.add(new Rook(0, 7, false, "rook"));
-        for (int i = 0; i < 8; i++) {
-            pieces.add(new Pawn(1, i, false, "pawn"));
+
+    //Initialize the Pieces
+    public void initializePieces() {
+        //Initialize Pawns
+        for(int i = 0; i < 8; i++) {
+            blackPawn[i] = new Pawn("black");
+            whitePawn[i] = new Pawn("white");
         }
-
-            // White pieces
-        pieces.add(new Rook(7, 0, true, "rook"));
-        pieces.add(new Knight(7, 1, true, "knight"));
-        pieces.add(new Bishop(7, 2, true, "bishop"));
-        pieces.add(new Queen(7, 3, true, "queen"));
-        pieces.add(new King(7, 4, true, "king"));
-        pieces.add(new Bishop(7, 5, true, "bishop"));
-        pieces.add(new Knight(7, 6, true, "knight"));
-        pieces.add(new Rook(7, 7, true, "rook"));
-        for (int i = 0; i < 8; i++) {
-            pieces.add(new Pawn(6, i, true, "pawn"));
+        //Initialize Other Pieces
+        for(int i = 0; i < 2; i++) {
+            blackBishop[i] = new Bishop("black");
+            whiteBishop[i] = new Bishop("white");
+            blackKnight[i] = new Knight("black");
+            whiteKnight[i] = new Knight("white");
+            blackRook[i] = new Rook("black");
+            whiteRook[i] = new Rook("white");
         }
-
-            // Place all the pieces on the board
-            for (Piece piece : pieces) {
-                System.out.println(piece);
-//                JLabel pieceLabel = new JLabel(new ImageIcon(piece.getImage()));
-                // Scale the image to the desired size
-//                System.out.println("WIDTH: " + piece.getImage().getWidth());
-                int newWidth = 60; // New width of the image
-                int newHeight = 60; // New height of the image
-                Image scaledImage = piece.getImage().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-                ImageIcon scaledIcon = new ImageIcon(scaledImage);
-                JLabel pieceLabel = new JLabel(scaledIcon);
-                tiles[piece.getX()][piece.getY()].add(pieceLabel);
-
-            }
-        }
-
-    //Method to get the Square at position (x, y)
-    public Square getSquare(int x, int y) {
-        return squares[x][y];
     }
 
-    // Method to check if the king of the given color is in check
-    public boolean isKingInCheck(boolean isWhite) {
-        // Find the position of the king of the given color
-        int kingX = -1;
-        int kingY = -1;
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                Square square = squares[i][j];
-                if (square.getPiece() instanceof King && square.getPiece().isWhite() == isWhite) {
-                    kingX = i;
-                    kingY = j;
-                    break;
-                }
-            }
+    public void initializeChessBoard() {
+        //Placing Pawns in the chess board and setting as not open
+        for(int i = 0; i < 8; i++) {
+            this.cell[1][i].add(blackPawn[i]);
+            this.cell[6][i].add(whitePawn[i]);
+            this.cell[1][i].setPiece(blackPawn[i]);
+            this.cell[6][i].setPiece(whitePawn[i]);
         }
-        // If the king's position is not found, return false
-        if (kingX == -1 || kingY == -1) {
-            return false;
-        }
+        //Placing and Setting Rook
+        this.cell[0][0].add(blackRook[0]);
+        this.cell[0][7].add(blackRook[1]);
+        this.cell[7][0].add(whiteRook[0]);
+        this.cell[7][7].add(whiteRook[1]);
+        this.cell[0][0].setPiece(blackRook[0]);
+        this.cell[0][7].setPiece(blackRook[1]);
+        this.cell[7][0].setPiece(whiteRook[0]);
+        this.cell[7][7].setPiece(whiteRook[1]);
+        //Placing and Setting Knight
+        this.cell[0][1].add(blackKnight[0]);
+        this.cell[0][6].add(blackKnight[1]);
+        this.cell[7][1].add(whiteKnight[0]);
+        this.cell[7][6].add(whiteKnight[1]);
+        this.cell[0][1].setPiece(blackKnight[0]);
+        this.cell[0][6].setPiece(blackKnight[1]);
+        this.cell[7][1].setPiece(whiteKnight[0]);
+        this.cell[7][6].setPiece(whiteKnight[1]);
+        //Placing and Setting Bishop
+        this.cell[0][2].add(blackBishop[0]);
+        this.cell[0][5].add(blackBishop[1]);
+        this.cell[7][2].add(whiteBishop[0]);
+        this.cell[7][5].add(whiteBishop[1]);
+        this.cell[0][2].setPiece(blackBishop[0]);
+        this.cell[0][5].setPiece(blackBishop[1]);
+        this.cell[7][2].setPiece(whiteBishop[0]);
+        this.cell[7][5].setPiece(whiteBishop[1]);
+        //Placing and Setting King and Queen
+        this.cell[0][3].add(blackQueen);
+        this.cell[0][4].add(blackKing);
+        this.cell[7][3].add(whiteQueen);
+        this.cell[7][4].add(whiteKing);
+        this.cell[0][3].setPiece(blackQueen);
+        this.cell[0][4].setPiece(blackKing);
+        this.cell[7][3].setPiece(whiteQueen);
+        this.cell[7][4].setPiece(whiteKing);
+        setAsNotOpen();
+    }
 
-        // Check if any opponent's piece can attack the king
-        for (int i = 0; i < 8; i++) {
+    //Set the cell status for a new game
+    public void setAsNotOpen() {
+        for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                Square square = squares[i][j];
-                if (square.getPiece() != null && square.getPiece().isWhite() != isWhite) {
-                    // Check if the piece can legally move to the king's position
-                    if (square.getPiece().legalMove(this, square, squares[kingX][kingY])) {
-                        return true; // King is in check
-                    }
+                if (i == 0 || i == 1 || i == 6 || i == 7) {		//Rows with pieces on them
+                    this.cell[i][j].setStatus(false);
                 }
+                else this.cell[i][j].setStatus(true);			//Rows without pieces
             }
         }
-        // If no opponent's piece can attack the king, return false
-        return false;
     }
 
 }

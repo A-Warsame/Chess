@@ -1,30 +1,29 @@
+import javax.swing.ImageIcon;
+
+//The Queen
+@SuppressWarnings("serial")
 public class Queen extends Piece {
-    private int x;
-    private int y;
-
-    public Queen(int x, int y, boolean isWhite, String type) {
-        super(x, y, isWhite, type);
-        this.x = x;
-        this.y = y;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-    @Override
-    public int getY() {
-        return y;
-    }
-
-    @Override
-    public boolean legalMove(ChessBoard chessBoard, Square beforeMove, Square afterMove) {
-        if (beforeMove.getPiece() != null && beforeMove.getPiece().isWhite() == this.isWhite()) {
-            return false;
+    //A queen
+    public Queen(String color) {
+        if (color == "white") {
+            this.color = "white";
+            icon = new ImageIcon("images/white_queen.png");
+            setIcon(icon);
         }
-        int x = Math.abs(beforeMove.getX() - afterMove.getX());
-        int y = Math.abs(beforeMove.getY() - afterMove.getY());
-
-        return x == 0 || y == 0 || x == y; //move like rook and bishop
+        else {
+            this.color = "black";
+            icon = new ImageIcon("images/black_queen.png");
+            setIcon(icon);
+        }
+    }
+    //Returns the color
+    @Override
+    public String getColor()  {
+        return this.color;
+    }
+    //Returns the type of piece
+    @Override
+    public String getType()  {
+        return "queen";
     }
 }
