@@ -3,7 +3,7 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class ChessBoard extends JPanel {
-    public Square[][] cell = new Square[8][8];					//Board size
+    public Square[][] squares = new Square[8][8];					//Board size
     public Color black = new Color(145,140,125);			//Black cells
     public Color white = new Color(232, 235, 239);			//White Cells
 
@@ -31,15 +31,15 @@ public class ChessBoard extends JPanel {
         for (int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if((i + j) % 2 == 0 ) {
-                    this.cell[i][j] = new Square(i, j);
-                    this.cell[i][j].setBackground(white);
+                    this.squares[i][j] = new Square(i, j);
+                    this.squares[i][j].setBackground(white);
                 }
                 else {
-                    this.cell[i][j] = new Square(i, j);
-                    this.cell[i][j].setBackground(black);
+                    this.squares[i][j] = new Square(i, j);
+                    this.squares[i][j].setBackground(black);
                 }
-                cell[i][j].setPosition(i, j);
-                add(cell[i][j]);
+                squares[i][j].setPosition(i, j);
+                add(squares[i][j]);
             }
         }
 
@@ -66,47 +66,47 @@ public class ChessBoard extends JPanel {
     public void initializeChessBoard() {
         //Placing Pawns in the chess board and setting as not open
         for(int i = 0; i < 8; i++) {
-            this.cell[1][i].add(blackPawn[i]);
-            this.cell[6][i].add(whitePawn[i]);
-            this.cell[1][i].setPiece(blackPawn[i]);
-            this.cell[6][i].setPiece(whitePawn[i]);
+            this.squares[1][i].add(blackPawn[i]);
+            this.squares[6][i].add(whitePawn[i]);
+            this.squares[1][i].setPiece(blackPawn[i]);
+            this.squares[6][i].setPiece(whitePawn[i]);
         }
         //Placing and Setting Rook
-        this.cell[0][0].add(blackRook[0]);
-        this.cell[0][7].add(blackRook[1]);
-        this.cell[7][0].add(whiteRook[0]);
-        this.cell[7][7].add(whiteRook[1]);
-        this.cell[0][0].setPiece(blackRook[0]);
-        this.cell[0][7].setPiece(blackRook[1]);
-        this.cell[7][0].setPiece(whiteRook[0]);
-        this.cell[7][7].setPiece(whiteRook[1]);
+        this.squares[0][0].add(blackRook[0]);
+        this.squares[0][7].add(blackRook[1]);
+        this.squares[7][0].add(whiteRook[0]);
+        this.squares[7][7].add(whiteRook[1]);
+        this.squares[0][0].setPiece(blackRook[0]);
+        this.squares[0][7].setPiece(blackRook[1]);
+        this.squares[7][0].setPiece(whiteRook[0]);
+        this.squares[7][7].setPiece(whiteRook[1]);
         //Placing and Setting Knight
-        this.cell[0][1].add(blackKnight[0]);
-        this.cell[0][6].add(blackKnight[1]);
-        this.cell[7][1].add(whiteKnight[0]);
-        this.cell[7][6].add(whiteKnight[1]);
-        this.cell[0][1].setPiece(blackKnight[0]);
-        this.cell[0][6].setPiece(blackKnight[1]);
-        this.cell[7][1].setPiece(whiteKnight[0]);
-        this.cell[7][6].setPiece(whiteKnight[1]);
+        this.squares[0][1].add(blackKnight[0]);
+        this.squares[0][6].add(blackKnight[1]);
+        this.squares[7][1].add(whiteKnight[0]);
+        this.squares[7][6].add(whiteKnight[1]);
+        this.squares[0][1].setPiece(blackKnight[0]);
+        this.squares[0][6].setPiece(blackKnight[1]);
+        this.squares[7][1].setPiece(whiteKnight[0]);
+        this.squares[7][6].setPiece(whiteKnight[1]);
         //Placing and Setting Bishop
-        this.cell[0][2].add(blackBishop[0]);
-        this.cell[0][5].add(blackBishop[1]);
-        this.cell[7][2].add(whiteBishop[0]);
-        this.cell[7][5].add(whiteBishop[1]);
-        this.cell[0][2].setPiece(blackBishop[0]);
-        this.cell[0][5].setPiece(blackBishop[1]);
-        this.cell[7][2].setPiece(whiteBishop[0]);
-        this.cell[7][5].setPiece(whiteBishop[1]);
+        this.squares[0][2].add(blackBishop[0]);
+        this.squares[0][5].add(blackBishop[1]);
+        this.squares[7][2].add(whiteBishop[0]);
+        this.squares[7][5].add(whiteBishop[1]);
+        this.squares[0][2].setPiece(blackBishop[0]);
+        this.squares[0][5].setPiece(blackBishop[1]);
+        this.squares[7][2].setPiece(whiteBishop[0]);
+        this.squares[7][5].setPiece(whiteBishop[1]);
         //Placing and Setting King and Queen
-        this.cell[0][3].add(blackQueen);
-        this.cell[0][4].add(blackKing);
-        this.cell[7][3].add(whiteQueen);
-        this.cell[7][4].add(whiteKing);
-        this.cell[0][3].setPiece(blackQueen);
-        this.cell[0][4].setPiece(blackKing);
-        this.cell[7][3].setPiece(whiteQueen);
-        this.cell[7][4].setPiece(whiteKing);
+        this.squares[0][3].add(blackQueen);
+        this.squares[0][4].add(blackKing);
+        this.squares[7][3].add(whiteQueen);
+        this.squares[7][4].add(whiteKing);
+        this.squares[0][3].setPiece(blackQueen);
+        this.squares[0][4].setPiece(blackKing);
+        this.squares[7][3].setPiece(whiteQueen);
+        this.squares[7][4].setPiece(whiteKing);
         setAsNotOpen();
     }
 
@@ -115,9 +115,9 @@ public class ChessBoard extends JPanel {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (i == 0 || i == 1 || i == 6 || i == 7) {		//Rows with pieces on them
-                    this.cell[i][j].setStatus(false);
+                    this.squares[i][j].setStatus(false);
                 }
-                else this.cell[i][j].setStatus(true);			//Rows without pieces
+                else this.squares[i][j].setStatus(true);			//Rows without pieces
             }
         }
     }

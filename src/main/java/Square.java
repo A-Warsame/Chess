@@ -7,7 +7,7 @@ public class Square extends JPanel {
     private boolean open = true;				//Cell Status (Open?)
     private int row;
     private int col;
-    private Color originalColor;
+
 
     //A cell on the board
     public Square (int row, int col) {

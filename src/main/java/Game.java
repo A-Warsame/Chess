@@ -32,7 +32,7 @@ public class Game extends JFrame implements MouseListener {
         board.initializeChessBoard();
         whoseMove = "white";
         for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) board.cell[i][j].addMouseListener(this);
+            for (int j = 0; j < 8; j++) board.squares[i][j].addMouseListener(this);
         }
     }
 
@@ -52,7 +52,7 @@ public class Game extends JFrame implements MouseListener {
             selected = previousSquare.getBackground();
             previousSquare.setBackground(new Color(175, 0, 0));
             piece = previousSquare.getPiece();
-            validMoves = piece.getValidMoves(board.cell, sourceSquare.getRow(), sourceSquare.getCol());
+            validMoves = piece.getValidMoves(board.squares, sourceSquare.getRow(), sourceSquare.getCol());
             selectedTiles = new ArrayList<>();
             for (Square validMove : validMoves) {
                 Color test = validMove.getBackground();
@@ -70,7 +70,7 @@ public class Game extends JFrame implements MouseListener {
     }
     private boolean isValidMove(Square destination) {
         Piece piece = previousSquare.getPiece();
-        List<Square> validMoves = piece.getValidMoves(board.cell, previousSquare.getRow(), previousSquare.getCol());
+        List<Square> validMoves = piece.getValidMoves(board.squares, previousSquare.getRow(), previousSquare.getCol());
         return validMoves.contains(destination);
     }
     // Function moves the pieces
