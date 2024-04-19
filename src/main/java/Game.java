@@ -6,24 +6,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@SuppressWarnings("serial")
 public class Game extends JFrame implements MouseListener {
 
     private static ChessBoard board = new ChessBoard();
-    public static Square previousSquare = null;
+    public static Square previousSelectedSquare = null;
     public static Square sourceSquare = null;
     public static String pieceColor = "";
     public static String whoseMove = "";
-    public static boolean active = false;
+    public static boolean canTake = false;
     private List<Square> validMoves;
     private Piece piece;
-//    public static boolean capture = false;
+//    public static boolean taken = false;
 
-    // Game object
-    public Game() {
-        // Initializes the game
+//    public Game() {
+//    }
+
+    // Static factory method to create a new instance of Game
+    public static Game createGame() {
+        Game game = new Game();
+        game.initializeGame();
+        return game;
+    }
+
+    // Method to set up the initial state of the game
+    private void initializeGame() {
+        board = new ChessBoard();
         setLayout(new GridBagLayout());
-        // Sets Board
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
@@ -46,12 +54,12 @@ public class Game extends JFrame implements MouseListener {
 
         if (!sourceSquare.isOpen()) pieceColor = sourceSquare.getPiece().getColor();
 
-        if (!active && !sourceSquare.isOpen()) {
-            active = true;
-            previousSquare = sourceSquare;
-            selected = previousSquare.getBackground();
-            previousSquare.setBackground(new Color(175, 0, 0));
-            piece = previousSquare.getPiece();
+        if (!canTake && !sourceSquare.isOpen()) {
+            canTake = true;
+            previousSelectedSquare = sourceSquare;
+            selected = previousSelectedSquare.getBackground();
+            previousSelectedSquare.setBackground(new Color(175, 0, 0));
+            piece = previousSelectedSquare.getPiece();
             validMoves = piece.getValidMoves(board.squares, sourceSquare.getRow(), sourceSquare.getCol());
             selectedTiles = new ArrayList<>();
             for (Square validMove : validMoves) {
@@ -59,8 +67,8 @@ public class Game extends JFrame implements MouseListener {
                 selectedTiles.add(test);
                 validMove.setBackground(new Color( 204, 97, 75));
             }
-            if (!previousSquare.getPiece().getColor().equals(whoseMove)) clear();
-        } else if (active && previousSquare.getPiece().getColor().equals(whoseMove)) {
+            if (!previousSelectedSquare.getPiece().getColor().equals(whoseMove)) clear();
+        } else if (canTake && previousSelectedSquare.getPiece().getColor().equals(whoseMove)) {
             if (isValidMove(sourceSquare)) {
                 movePiece();
             } else {
@@ -69,61 +77,63 @@ public class Game extends JFrame implements MouseListener {
         }
     }
     private boolean isValidMove(Square destination) {
-        Piece piece = previousSquare.getPiece();
-        List<Square> validMoves = piece.getValidMoves(board.squares, previousSquare.getRow(), previousSquare.getCol());
+        Piece piece = previousSelectedSquare.getPiece();
+        List<Square> validMoves = piece.getValidMoves(board.squares, previousSelectedSquare.getRow(), previousSelectedSquare.getCol());
         return validMoves.contains(destination);
     }
     // Function moves the pieces
     public void movePiece() {
-        System.out.println("Piece was moved");
+//        System.out.println("Piece was moved");
+        System.out.println(whoseMove + " moved their piece");
 //        capture = true;
 //        if(sourceSquare.isOpen()) {
 //            capture = true;
 //        }
-        if (!sourceSquare.isOpen() && !previousSquare.getPiece().getColor().equalsIgnoreCase(pieceColor)) {
+        if (!sourceSquare.isOpen() && !previousSelectedSquare.getPiece().getColor().equalsIgnoreCase(pieceColor)) {
             sourceSquare.remove(sourceSquare.getPiece());
             sourceSquare.setPiece(null);
 //            capture = false;
         }
-        previousSquare.setBackground(selected);
+        previousSelectedSquare.setBackground(selected);
         int i = 0;
         for (Square validMove : validMoves) {
             validMove.setBackground(selectedTiles.get(i));
             i++;
         }
-        sourceSquare.add(previousSquare.getPiece());
-        sourceSquare.setPiece(previousSquare.getPiece());
+        sourceSquare.add(previousSelectedSquare.getPiece());
+        sourceSquare.setPiece(previousSelectedSquare.getPiece());
         sourceSquare.revalidate();
         board.repaint();
-        active = false;
-        previousSquare.setStatus(true);
-        previousSquare.setPiece(null);
+        canTake = false;
+        previousSelectedSquare.setStatus(true);
+        previousSelectedSquare.setPiece(null);
         sourceSquare.setStatus(false);
-        previousSquare = null;
+        previousSelectedSquare = null;
         whoseMove = whoseMove.equals("white") ? "black" : "white";
     }
 
+    //resets colour and selected square
     public void clear() {
-        System.out.println("Piece was not moved");
-        previousSquare.setBackground(selected);
+//        System.out.println("Piece was not moved");
+        System.out.println("Current move: " + whoseMove);
+        previousSelectedSquare.setBackground(selected);
         int i = 0;
         for (Square validMove : validMoves) {
             validMove.setBackground(selectedTiles.get(i));
             i++;
         }
-        active = false;
-//        capture = false;
-        previousSquare = null;
+        canTake = false;
+//        taken = false;
+        previousSelectedSquare = null;
         sourceSquare = null;
     }
 
     public static void main(String[] args) {
-        JFrame frame = new Game();
-        frame.setSize(800, 600);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        frame.setResizable(isDefaultLookAndFeelDecorated());
+        Game game = Game.createGame();
+        game.setSize(540, 555);
+        game.setLocationRelativeTo(null);
+        game.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        game.setVisible(true);
     }
 
     @Override

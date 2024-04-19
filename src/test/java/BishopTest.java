@@ -1,13 +1,21 @@
 import static org.junit.Assert.*;
+
+import org.junit.Before;
 import org.junit.Test;
 import java.util.List;
 
 public class BishopTest {
 
+    ChessBoard board;
+    @Before
+    public void instantiateChessBoard() {
+        board = new ChessBoard();
+
+    }
+
     @Test
     public void testValidMovesForWhiteBishop() {
-        // Create a chessboard
-        ChessBoard board = new ChessBoard();
+
         // Create a white bishop
         Bishop whiteBishop = new Bishop("white");
         // Set the bishop on the board
@@ -37,14 +45,13 @@ public class BishopTest {
 
     @Test
     public void testInvalidMovesBeyondBoardBoundaries() {
-        // Create a chessboard
-        ChessBoard board = new ChessBoard();
-        // Create a black bishop
+
+        board = new ChessBoard();
         Bishop blackBishop = new Bishop("black");
-        // Set the bishop on the board at the edge
+
         board.squares[0][7].setPiece(blackBishop);
 
-        // Get valid moves for the black bishop at position (0, 7)
+        // valid moves for the black bishop at 0,7
         List<Square> validMoves = blackBishop.getValidMoves(board.squares, 0, 7);
 
         // Assert the number of valid moves

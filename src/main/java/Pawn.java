@@ -2,8 +2,7 @@ import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.List;
 
-//The pawn piece
-@SuppressWarnings("serial")
+
 public class Pawn extends Piece {
     //A pawn
     public Pawn(String color) {
@@ -64,7 +63,7 @@ public class Pawn extends Piece {
         return validMoves;
     }
 
-    private boolean isValidSquare(int row, int col) {
-        return row >= 0 && row < 8 && col >= 0 && col < 8;
-    }
+//    private boolean isValidSquare(int row, int col) {
+//        return row >= 0 && row < 8 && col >= 0 && col < 8;
+//    }
 }

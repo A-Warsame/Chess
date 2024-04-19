@@ -6,20 +6,14 @@ public class QueenTest {
 
     @Test
     public void testValidMovesForWhiteQueen() {
-        // Create a chessboard
         ChessBoard board = new ChessBoard();
-        // Create a white queen
         Queen whiteQueen = new Queen("white");
-        // Set the queen on the board
         board.squares[3][3].setPiece(whiteQueen);
 
-        // Get valid moves for the white queen at position (3, 3)
         List<Square> validMoves = whiteQueen.getValidMoves(board.squares, 3, 3);
 
-        // Assert the number of valid moves
         assertEquals(27, validMoves.size()); // 27 valid moves for a queen in the center of the board
 
-        // Assert the position of the valid moves
         assertTrue(validMoves.contains(board.squares[3][0])); // Horizontal left
         assertTrue(validMoves.contains(board.squares[3][1])); // Horizontal left
         assertTrue(validMoves.contains(board.squares[3][2])); // Horizontal left
@@ -51,17 +45,12 @@ public class QueenTest {
 
     @Test
     public void testInvalidMovesBeyondBoardBoundaries() {
-        // Create a chessboard
         ChessBoard board = new ChessBoard();
-        // Create a black queen
         Queen blackQueen = new Queen("black");
-        // Set the queen on the board at the edge
         board.squares[0][7].setPiece(blackQueen);
 
-        // Get valid moves for the black queen at position (0, 7)
         List<Square> validMoves = blackQueen.getValidMoves(board.squares, 0, 7);
 
-        // Assert the number of valid moves
-        assertEquals(21, validMoves.size()); // 21 valid moves for a queen at the edge of the board
+        assertEquals(21, validMoves.size());
     }
 }

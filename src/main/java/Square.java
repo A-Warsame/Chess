@@ -1,10 +1,9 @@
 import javax.swing.JPanel;
 import java.awt.*;
 
-@SuppressWarnings("serial")
 public class Square extends JPanel {
     private Piece piece; 						//What piece in the square
-    private boolean open = true;				//Cell Status (Open?)
+    private boolean open = true;				//square Status (Open?)
     private int row;
     private int col;
 

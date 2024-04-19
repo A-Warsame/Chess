@@ -2,8 +2,6 @@ import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.List;
 
-//The king
-@SuppressWarnings("serial")
 public class King extends Piece {
     //A king
     public King(String color) {
@@ -49,7 +47,7 @@ public class King extends Piece {
         return validMoves;
     }
 
-    private boolean isValidSquare(int row, int col) {
-        return row >= 0 && row < 8 && col >= 0 && col < 8;
-    }
+//    private boolean isValidSquare(int row, int col) {
+//        return row >= 0 && row < 8 && col >= 0 && col < 8;
+//    }
 }

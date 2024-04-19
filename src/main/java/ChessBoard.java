@@ -1,7 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
 
-@SuppressWarnings("serial")
 public class ChessBoard extends JPanel {
     public Square[][] squares = new Square[8][8];					//Board size
     public Color black = new Color(145,140,125);			//Black cells
@@ -27,7 +26,7 @@ public class ChessBoard extends JPanel {
     public ChessBoard()  {
         initializePieces();
         setLayout(new GridLayout(8,8));
-        //Adding the cells
+        //Adding the squares
         for (int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
                 if((i + j) % 2 == 0 ) {
@@ -110,7 +109,7 @@ public class ChessBoard extends JPanel {
         setAsNotOpen();
     }
 
-    //Set the cell status for a new game
+    //Set the square status for a new game
     public void setAsNotOpen() {
         for(int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {

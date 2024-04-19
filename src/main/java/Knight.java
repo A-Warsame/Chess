@@ -2,10 +2,8 @@ import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.List;
 
-//The horse/knight piece
-@SuppressWarnings("serial")
+
 public class Knight extends Piece{
-    //A knight
     public Knight(String color) {
         if (color == "white") {
             this.color = "white";
@@ -47,7 +45,7 @@ public class Knight extends Piece{
         return validMoves;
     }
 
-    private boolean isValidSquare(int row, int col) {
-        return row >= 0 && row < 8 && col >= 0 && col < 8;
-    }
+//    private boolean isValidSquare(int row, int col) {
+//        return row >= 0 && row < 8 && col >= 0 && col < 8;
+//    }
 }

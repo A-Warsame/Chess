@@ -2,8 +2,6 @@ import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.List;
 
-//A Rook Piece
-@SuppressWarnings("serial")
 public class Rook extends Piece {
     //A rook
     public Rook(String color) {
@@ -54,7 +52,7 @@ public class Rook extends Piece {
         return validMoves;
     }
 
-    private boolean isValidSquare(int row, int col) {
-        return row >= 0 && row < 8 && col >= 0 && col < 8;
-    }
+//    private boolean isValidSquare(int row, int col) {
+//        return row >= 0 && row < 8 && col >= 0 && col < 8;
+//    }
 }

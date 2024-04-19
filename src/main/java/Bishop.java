@@ -2,8 +2,7 @@ import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.List;
 
-//The bishop
-@SuppressWarnings("serial")
+
 public class Bishop extends Piece {
     //A standard bishop (Defaults to white)
     public Bishop() {
@@ -59,7 +58,7 @@ public class Bishop extends Piece {
         return validMoves;
     }
 
-    private boolean isValidSquare(int row, int col) {
-        return row >= 0 && row < 8 && col >= 0 && col < 8;
-    }
+//    private boolean isValidSquare(int row, int col) {
+//        return row >= 0 && row < 8 && col >= 0 && col < 8;
+//    }
 }
